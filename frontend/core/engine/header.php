@@ -601,20 +601,16 @@ class FrontendHeader extends FrontendBaseObject
 		// search for the webpropertyId in the header and footer, if not found we should build the GA-code
 		if($webPropertyId != '' && strpos($siteHTMLHeader, $webPropertyId) === false && strpos($siteHTMLFooter, $webPropertyId) === false)
 		{
-			// build GA-tracking code
-			$trackingCode = '<script>
-								var _gaq = [[\'_setAccount\', \'' . $webPropertyId . '\'],
-											[\'_setDomainName\', \'none\'],
-											[\'_trackPageview\'],
-											[\'_trackPageLoadTime\']];
+            // build analytics-tracking code
+            $trackingCode = "<script>
+                                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-								(function(d, t) {
-									var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
-									g.async = true;
-									g.src = \'//www.google-analytics.com/ga.js\';
-									s.parentNode.insertBefore(g, s);
-								}(document, \'script\'));
-							</script>';
+                                ga('create', '" . $webPropertyId . "', {'cookieDomain': 'none'});
+                                ga('send', 'pageview');
+                            </script>";
 
 			// add to the header
 			$siteHTMLHeader .= "\n" . $trackingCode;
